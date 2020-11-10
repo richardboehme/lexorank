@@ -61,4 +61,15 @@ class RankingTest < Minitest::Test
     assert_nil Page2.ranking_group_by
   end
 
+  should 'error out if invalid ranks' do
+    Page.create(rank: '0')
+    p = Page.create
+    error =
+      assert_raises Lexorank::InvalidRankError do
+        p.move_to_top
+      end
+    assert_equal('This rank should not be achievable using the Lexorank::Rankable module! ' +
+      'Please report to https://github.com/richardboehme/lexorank/issues! The supplied ranks were nil and "0". Please include those in the issue description.', error.message)
+  end
+
 end

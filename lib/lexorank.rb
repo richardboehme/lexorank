@@ -23,13 +23,14 @@ require 'lexorank/version'
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 module Lexorank
+  class InvalidRankError < StandardError; end
 
   MIN_CHAR = '0'.freeze
   MAX_CHAR = 'z'.freeze
 
-  def value_between(before, after)
-    before = before || MIN_CHAR
-    after = after || MAX_CHAR
+  def value_between(_before_, _after_)
+    before = _before_ || MIN_CHAR
+    after = _after_ || MAX_CHAR
 
     rank = ''
 
@@ -52,7 +53,21 @@ module Lexorank
       break
     end
 
-    rank >= after ? before : rank
+    # Problem: If we try to get a rank before the character '0' or after 'z' the algorithm would return the same char
+    # This first of all breaks a possible unique constraint and of course makes no sense when ordering the items.
+    #
+    # Thoughts: I think this issue will never happen with the Lexorank::Rankable module
+    # Why? Let's look at '0' as a rank:
+    # Because the algorithm always chooses the char in between two other chars, '0' can only happen when before is nil and after is '1'
+    # In this case the algorithm will return '0U' though. This means there will never be an item with rank '0' which is why this condition
+    # should never equal to true.
+    #
+    # Please report if you have another opinion about that or if you reached the exception! (of course you can force it by using `value_between(nil, '0')`)
+    if rank >= after
+      raise InvalidRankError.new("This rank should not be achievable using the Lexorank::Rankable module! Please report to https://github.com/richardboehme/lexorank/issues! " +
+        "The supplied ranks were #{_before_.inspect} and #{_after_.inspect}. Please include those in the issue description.")
+    end
+    rank
   end
 
   def mid(prev, after)
