@@ -61,7 +61,7 @@ require 'lexorank/rankable'
 class Page < ActiveRecord::Base
   rank!
 
-  before_update do
+  before_create do
     self.move_to_top
   end
 end
@@ -195,6 +195,8 @@ The solution to this problem is rebalancing all rank values, which currently isn
 
 ## Performance
 
+**Disclaimer:** *I'm kinda new to benchmarking. Feel free to give tips or advice on the current [implementation](benchmarks/scope_benchmark.rb).*
+
 Because of possible unbalanced ranks, receiving data from the database can slow down. To demonstrate this there is a [benchmark](benchmarks/scope_benchmark.rb) which will compare receiving data from a balanced set of x items against an unbalanced set of x items.
 
 The result with 100,000 items:
@@ -212,8 +214,6 @@ Balanced:          0.752344   0.000000   0.752344 (  0.752352)
 
 *Setup: ActiveRecord with SQLite on WSL2 running ruby 2.7.2*
 
-**Disclaimer:** I'm kinda new to benchmarking. Feel free to give tips or advice on the current [implementation](benchmarks/scope_benchmark.rb).
-
 ## Planned Features
 
 - [ ] task to rebalance ranks
@@ -225,7 +225,7 @@ Balanced:          0.752344   0.000000   0.752344 (  0.752352)
 <details>
 <summary>Contributing</summary>
 
-Bug reports and pull requests are highly welcomed and appreciated. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/richardboehme/lexorank/blob/master/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are highly welcomed and appreciated. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](CODE_OF_CONDUCT.md).
 
 1. Fork the repository
 2. Create your feature branch by branching off of **main** (`git checkout -b my-new-feature`)
