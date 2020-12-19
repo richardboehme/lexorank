@@ -64,8 +64,8 @@ module Lexorank
     #
     # Please report if you have another opinion about that or if you reached the exception! (of course you can force it by using `value_between(nil, '0')`)
     if rank >= after
-      raise InvalidRankError.new("This rank should not be achievable using the Lexorank::Rankable module! Please report to https://github.com/richardboehme/lexorank/issues! " +
-        "The supplied ranks were #{_before_.inspect} and #{_after_.inspect}. Please include those in the issue description.")
+      raise InvalidRankError, "This rank should not be achievable using the Lexorank::Rankable module! Please report to https://github.com/richardboehme/lexorank/issues! " +
+        "The supplied ranks were #{_before_.inspect} and #{_after_.inspect}. Please include those in the issue description."
     end
     rank
   end
