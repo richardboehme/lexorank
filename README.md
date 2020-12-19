@@ -16,13 +16,24 @@ And then execute:
 
     $ bundle install
 
+Your model will need a database column storing the rank. The default ranking column is called `rank`, however you are free to change that (see [rank!](#rank)).
+
+One way to add this in a rails application is to generate a simple migration:
+
+    $ rails g migration AddRankTo<insert model name here> rank:text:uniq
+
 <details>
-<summary>Alternative: Install it yourself</summary>
+<summary>This should generate a migration like that:</summary>
 
-    $ gem install lexorank
+```ruby
+class AddRankToPages < ActiveRecord::Migration[6.1]
+  def change
+    add_column :pages, :rank, :text
+    add_index :pages, :rank, unique: true
+  end
+end
+```
 </details>
-
-
 
 ## Basic Usage
 
@@ -195,11 +206,14 @@ The solution to this problem is rebalancing all rank values, which currently isn
 
 ## Performance
 
-**Disclaimer:** *I'm kinda new to benchmarking. Feel free to give tips or advice on the current [implementation](benchmarks/scope_benchmark.rb).*
+**Disclaimer:** *I'm kinda new to benchmarking. Feel free to give tips or advice on the current [implementations](benchmarks).*
+
+All tests were run with the following setup: ActiveRecord with SQLite on WSL2 running ruby 2.7.2
 
 Because of possible unbalanced ranks, receiving data from the database can slow down. To demonstrate this there is a [benchmark](benchmarks/scope_benchmark.rb) which will compare receiving data from a balanced set of x items against an unbalanced set of x items.
 
-The result with 100,000 items:
+<details>
+<summary>Results with 100,000 items</summary>
 
 ```
 Rehearsal ----------------------------------------------------
@@ -211,8 +225,26 @@ Balanced:          0.828034   0.020021   0.848055 (  0.848072)
 Unbalanced:        1.146742   0.000000   1.146742 (  1.146751)
 Balanced:          0.752344   0.000000   0.752344 (  0.752352)
 ```
+</details>
+<br />
 
-*Setup: ActiveRecord with SQLite on WSL2 running ruby 2.7.2*
+Another [benchmark](benchmarks/move_to_benchmark.rb) checks how the internal algorithm which calculated new ranks performs. This method is still subject to optimization but one can see here that finding a rank between two close ranks takes significantly more time than finding a rank between two more different ranks.
+
+<details>
+<summary>Results (rank length of 100,000 letters):</summary>
+
+```
+Rehearsal ----------------------------------------------------------------------------
+value between two close ranks:             1.030404   0.210376   1.240780 (  1.240798)
+value between two more different ranks:    0.000043   0.000008   0.000051 (  0.000052)
+------------------------------------------------------------------- total: 1.240831sec
+
+                                               user     system      total        real
+value between two close ranks:             0.829689   0.300536   1.130225 (  1.130247)
+value between two more different ranks:    0.000067   0.000000   0.000067 (  0.000059)
+```
+</details>
+
 
 ## Planned Features
 
