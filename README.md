@@ -208,7 +208,7 @@ The solution to this problem is rebalancing all rank values, which currently isn
 
 **Disclaimer:** *I'm kinda new to benchmarking. Feel free to give tips or advice on the current [implementations](benchmarks).*
 
-All tests were run with the following setup: ActiveRecord with SQLite on WSL2 running ruby 2.7.2
+All tests were run with the following setup: ActiveRecord with SQLite on WSL2 running ruby 3.0.0
 
 Because of possible unbalanced ranks, receiving data from the database can slow down. To demonstrate this there is a [benchmark](benchmarks/scope_benchmark.rb) which will compare receiving data from a balanced set of x items against an unbalanced set of x items.
 
@@ -217,13 +217,13 @@ Because of possible unbalanced ranks, receiving data from the database can slow 
 
 ```
 Rehearsal ----------------------------------------------------
-Unbalanced:        1.216578   0.159991   1.376569 (  1.376589)
-Balanced:          0.828034   0.020021   0.848055 (  0.848072)
-------------------------------------------- total: 2.225187sec
+Unbalanced:        1.009327   0.190001   1.199328 (  1.199330)
+Balanced:          0.605503   0.039992   0.645495 (  0.645499)
+------------------------------------------- total: 1.845495sec
 
-                       user     system      total         real
-Unbalanced:        1.146742   0.000000   1.146742 (  1.146751)
-Balanced:          0.752344   0.000000   0.752344 (  0.752352)
+                       user     system      total        real
+Unbalanced:        0.872151   0.019991   0.892142 (  0.892137)
+Balanced:          0.617773   0.000000   0.617773 (  0.617767)
 ```
 </details>
 <br />
@@ -235,13 +235,13 @@ Another [benchmark](benchmarks/move_to_benchmark.rb) checks how the internal alg
 
 ```
 Rehearsal ----------------------------------------------------------------------------
-value between two close ranks:             1.030404   0.210376   1.240780 (  1.240798)
-value between two more different ranks:    0.000043   0.000008   0.000051 (  0.000052)
-------------------------------------------------------------------- total: 1.240831sec
+value between two close ranks:             0.872685   0.100091   0.972776 (  0.992852)
+value between two more different ranks:    0.000059   0.000006   0.000065 (  0.000064)
+------------------------------------------------------------------- total: 0.972841sec
 
                                                user     system      total        real
-value between two close ranks:             0.829689   0.300536   1.130225 (  1.130247)
-value between two more different ranks:    0.000067   0.000000   0.000067 (  0.000059)
+value between two close ranks:             0.818498   0.100112   0.918610 (  0.928660)
+value between two more different ranks:    0.000042   0.000000   0.000042 (  0.000035)
 ```
 </details>
 
