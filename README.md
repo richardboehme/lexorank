@@ -228,7 +228,7 @@ Balanced:          0.617773   0.000000   0.617773 (  0.617767)
 </details>
 <br />
 
-Another [benchmark](benchmarks/move_to_benchmark.rb) checks how the internal algorithm which calculated new ranks performs. This method is still subject to optimization but one can see here that finding a rank between two close ranks takes significantly more time than finding a rank between two more different ranks.
+Another [benchmark](benchmarks/move_to_benchmark.rb) checks how the internal algorithm which calculates new ranks performs. This method is still subject to optimization but one can see here that finding a rank between two close ranks takes significantly more time than finding a rank between two more different ranks.
 
 <details>
 <summary>Results (rank length of 100,000 letters):</summary>
@@ -288,6 +288,6 @@ Bug reports and pull requests are highly welcomed and appreciated. This project 
 
 ## License
 
-Copyright (c) 2020 Richard Böhme (richard.boehme1999@gmail.com)
+Copyright (c) 2021 Richard Böhme (richard.boehme1999@gmail.com)
 
 Lexorank is released under the [MIT License](https://opensource.org/licenses/MIT).
