@@ -289,6 +289,11 @@ Bug reports and pull requests are highly welcomed and appreciated. This project 
 
 ## Changelog
 
+### 0.1.1
+
+* Update license year
+* Let rubygems be happy to have an updated version
+
 ### 0.1.0
 
 *Initial Release*
