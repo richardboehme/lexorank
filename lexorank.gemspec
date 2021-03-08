@@ -14,6 +14,8 @@ Gem::Specification.new do |spec|
   spec.license = 'MIT'
   spec.required_ruby_version = Gem::Requirement.new('>= 2.3.0')
 
+  spec.files = Dir['LICENSE', 'lib/**/*']
+
   spec.add_dependency 'activesupport'
   spec.add_dependency 'activerecord'
 
