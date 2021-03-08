@@ -280,11 +280,18 @@ Bug reports and pull requests are highly welcomed and appreciated. This project 
 <details>
 <summary>Release a new version</summary>
 
-*todo*
+1. Update gem version in ``Lexorank::Version``
+2. Add changelog entries
+3. Push changes to github
+4. Create a release on github and create a tag for the version (v0.1.0 for example).
+4. Build gem and push to rubygems.org
 </details>
 
 ## Changelog
 
+### 0.1.0
+
+*Initial Release*
 
 ## License
 

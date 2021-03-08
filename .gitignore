@@ -8,3 +8,4 @@
 /tmp/
 .idea
 /docs/examples.drawio
+*.gem
