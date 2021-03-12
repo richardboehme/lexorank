@@ -9,3 +9,4 @@
 .idea
 /docs/examples.drawio
 *.gem
+Gemfile.lock
