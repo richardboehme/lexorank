@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        ruby: [ 2.5, 2.6, 2.7, '3.0', truffleruby, truffleruby-head, jruby, jruby-head ]
+        ruby: [ 2.3, 2.4, 2.5, 2.6, 2.7, '3.0', head, truffleruby, truffleruby-head, jruby, jruby-head ]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -22,3 +22,4 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - run: bundle exec rake
+        continue-on-error: ${{ endsWith(matrix.ruby, 'head') }}
