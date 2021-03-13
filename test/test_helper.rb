@@ -29,8 +29,20 @@ class Minitest::Test
         ActiveRecord::Base.connection.tables
       end
 
+
     tables.each do |table|
-      ActiveRecord::Base.connection.truncate(table)
+      if ActiveRecord::VERSION::MAJOR > 5
+        ActiveRecord::Base.connection.truncate(table)
+      else
+        case ActiveRecord::Base.connection.adapter_name.downcase.to_sym
+        when :mysql2 || :postgresql
+          ActiveRecord::Base.connection.execute("TRUNCATE #{ActiveRecord::Base.connection.quote_table_name(table)}")
+        when :sqlite
+          ActiveRecord::Base.connection.execute("DELETE FROM #{ActiveRecord::Base.connection.quote_table_name(table)}")
+        else
+          raise NotImplementedError
+        end
+      end
     end
   end
 
