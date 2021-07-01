@@ -16,6 +16,7 @@ load 'schema.rb'
 
 require 'models/page'
 require 'models/paragraph'
+require 'models/grouped_paragraph'
 
 class Minitest::Test
   include Shoulda::Context::DSL
@@ -51,16 +52,28 @@ class Minitest::Test
     assert !condition
   end
 
-  def create_sample_pages(count: 3, clazz: Page)
-    pages = []
+  def create_sample_docs(count:, clazz:, create_with: {})
+    docs = []
     count.times do
-      pages << clazz.create
+      docs << clazz.create(create_with)
     end
 
-    pages.each_with_index do |page, index|
-      page.move_to!(index)
+    docs.each_with_index do |doc, index|
+      doc.move_to!(index)
     end
 
-    pages
+    docs
+  end
+
+  def create_sample_pages(count: 3, clazz: Page)
+    create_sample_docs(count: count, clazz: clazz)
+  end
+
+  def create_sample_paragraphs(page, count: 3, clazz: Paragraph)
+    create_sample_docs(
+      count: count,
+      clazz: clazz,
+      create_with: { page: page },
+    )
   end
 end

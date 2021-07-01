@@ -60,9 +60,11 @@ module Lexorank::Rankable
         if position == 0
           [nil, collection.first]
         else
+          current_position = collection.map(&:id).index(self.id)
+          not_in_collection = current_position.nil?
           # if item is currently in front of the index we just use position otherwise position - 1
           # if the item has no rank we use position - 1
-          position -= 1 if !self.send(self.class.ranking_column) || collection.map(&:id).index(self.id) > position
+          position -= 1 if no_rank? || not_in_collection || current_position > position
           collection.offset(position).limit(2)
         end
 
@@ -85,6 +87,9 @@ module Lexorank::Rankable
       move_to!(0)
     end
 
+    def no_rank?
+      !self.send(self.class.ranking_column)
+    end
   end
 
 end
