@@ -67,4 +67,12 @@ class Minitest::Test
   def create_sample_pages(count: 3, clazz: Page)
     create_sample_docs(count: count, clazz: clazz)
   end
+
+  def create_sample_paragraphs(page, count: 3, clazz: Paragraph)
+    create_sample_docs(
+      count: count,
+      clazz: clazz,
+      create_with: { page: page },
+    )
+  end
 end

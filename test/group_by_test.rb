@@ -45,31 +45,53 @@ class GroupByTest < ActiveSupport::TestCase
     assert_nil Paragraph3.ranking_group_by
   end
 
-  should 'insert an existing doc into a different group' do
+  describe 'moving to a different group' do
     class Paragraph1 < ActiveRecord::Base
       self.table_name = "paragraphs"
       belongs_to :page
       rank!(group_by: :page_id)
     end
 
-    page1, page2 = create_sample_pages(count: 2)
-    paragraph1, paragraph2, paragraph3 = create_sample_paragraphs(page1, clazz: Paragraph1)
+    should 'insert into middle' do
+      page1, page2 = create_sample_pages(count: 2)
+      paragraph1, paragraph2, paragraph3 = create_sample_paragraphs(page1, clazz: Paragraph1)
 
-    new_paragraph = create_sample_paragraphs(page2, count: 1, clazz: Paragraph1).first
+      new_paragraph = create_sample_paragraphs(page2, count: 1, clazz: Paragraph1).first
 
-    new_paragraph.page = page1
-    new_paragraph.move_to(2)
-    new_paragraph.save!
+      new_paragraph.page = page1
+      new_paragraph.move_to(2)
+      new_paragraph.save!
 
-    expected = [paragraph1, paragraph2, new_paragraph,  paragraph3]
-    assert_equal expected, Paragraph1.where(page_id: page1.id).ranked
-  end
+      expected = [paragraph1, paragraph2, new_paragraph,  paragraph3]
+      assert_equal expected, Paragraph1.where(page_id: page1.id).ranked
+    end
 
-  def create_sample_paragraphs(page, count: 3, clazz: Paragraph)
-    create_sample_docs(
-      count: count,
-      clazz: clazz,
-      create_with: { page: page },
-    )
+    should 'insert at top' do
+      page1, page2 = create_sample_pages(count: 2)
+      paragraph1, paragraph2, paragraph3 = create_sample_paragraphs(page1, clazz: Paragraph1)
+
+      new_paragraph = create_sample_paragraphs(page2, count: 1, clazz: Paragraph1).first
+
+      new_paragraph.page = page1
+      new_paragraph.move_to(0)
+      new_paragraph.save!
+
+      expected = [new_paragraph, paragraph1, paragraph2,  paragraph3]
+      assert_equal expected, Paragraph1.where(page_id: page1.id).ranked
+    end
+
+    should 'insert at the end' do
+      page1, page2 = create_sample_pages(count: 2)
+      paragraph1, paragraph2, paragraph3 = create_sample_paragraphs(page1, clazz: Paragraph1)
+
+      new_paragraph = create_sample_paragraphs(page2, count: 1, clazz: Paragraph1).first
+
+      new_paragraph.page = page1
+      new_paragraph.move_to(3)
+      new_paragraph.save!
+
+      expected = [paragraph1, paragraph2,  paragraph3, new_paragraph]
+      assert_equal expected, Paragraph1.where(page_id: page1.id).ranked
+    end
   end
 end
