@@ -45,17 +45,31 @@ class GroupByTest < ActiveSupport::TestCase
     assert_nil Paragraph3.ranking_group_by
   end
 
-  def create_sample_paragraphs(page, count: 3)
-    paragraphs = []
-    count.times do
-      paragraphs << Paragraph.create(page: page)
+  should 'insert an existing doc into a different group' do
+    class Paragraph1 < ActiveRecord::Base
+      self.table_name = "paragraphs"
+      rank!(group_by: :page_id)
     end
 
-    paragraphs.each_with_index do |paragraph, index|
-      paragraph.move_to!(index)
-    end
+    page1, page2 = create_sample_pages(count: 2, clazz: Page)
+    paragraph1, paragraph2, paragraph3 = create_sample_pages(clazz: Paragraph1)
+    Paragraph1.update_all(page_id: page1.id)
 
-    paragraphs
+    create_sample_pages(count: 4, clazz: Paragraph1)
+    new_paragraph = Paragraph1.create!(page_id: page2.id)
+    new_paragraph.move_to!(1)
+
+    new_paragraph.page_id = page1.id
+    new_paragraph.move_to(2)
+    assert(new_paragraph.save!)
+    assert_equal [paragraph1, paragraph2, new_paragraph,  paragraph3], Paragraph1.where(page_id: page1.id).ranked
   end
 
+  def create_sample_paragraphs(page, count: 3)
+    create_sample_docs(
+      count: count,
+      clazz: Paragraph,
+      create_with: { page: page },
+    )
+  end
 end

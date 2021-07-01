@@ -71,23 +71,4 @@ class RankingTest < Minitest::Test
     assert_equal('This rank should not be achievable using the Lexorank::Rankable module! ' +
       'Please report to https://github.com/richardboehme/lexorank/issues! The supplied ranks were nil and "0". Please include those in the issue description.', error.message)
   end
-
-  should 'insert into top' do
-    class Paragraph1 < ActiveRecord::Base
-      self.table_name = "paragraphs"
-      rank!(group_by: :page_id)
-    end
-    page1, page2 = create_sample_pages(count: 2, clazz: Page)
-    paragraph1, paragraph2, paragraph3 = create_sample_pages(clazz: Paragraph1)
-    Paragraph1.update_all(page_id: page1.id)
-
-    create_sample_pages(count: 4, clazz: Paragraph1)
-    new_paragraph = Paragraph1.create!(page_id: page2.id)
-    new_paragraph.move_to!(1)
-
-    new_paragraph.page_id = page1.id
-    new_paragraph.move_to(2)
-    assert(new_paragraph.save!)
-    assert_equal [paragraph1, paragraph2, new_paragraph,  paragraph3], Paragraph1.where(page_id: page1.id).ranked
-  end
 end
