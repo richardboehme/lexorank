@@ -16,6 +16,7 @@ load 'schema.rb'
 
 require 'models/page'
 require 'models/paragraph'
+require 'models/grouped_paragraph'
 
 class Minitest::Test
   include Shoulda::Context::DSL
