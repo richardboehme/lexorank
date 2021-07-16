@@ -298,6 +298,14 @@ Bug reports and pull requests are highly welcomed and appreciated. This project 
 ## Changelog
 
 <details>
+<summary>0.1.3</summary>
+
+* add support to move element into another group ([#5](https://github.com/richardboehme/lexorank/pull/5), by [@bookis](https://github.com/bookis))
+* add the `no_rank?` method ([#5](https://github.com/richardboehme/lexorank/pull/5), by [@bookis](https://github.com/bookis))
+* remove in memory operations with the collection when calling `move_to`
+</details>
+
+<details>
 <summary>0.1.2</summary>
 
 * fix gem specification
