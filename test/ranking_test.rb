@@ -71,5 +71,4 @@ class RankingTest < Minitest::Test
     assert_equal('This rank should not be achievable using the Lexorank::Rankable module! ' +
       'Please report to https://github.com/richardboehme/lexorank/issues! The supplied ranks were nil and "0". Please include those in the issue description.', error.message)
   end
-
 end
