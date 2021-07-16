@@ -133,6 +133,14 @@ If an update is needed, the method will return the result of `save`, otherwise `
 Alias to [`move_to!(0)`](#move_to!)
 </details>
 
+<br />
+
+<details>
+<summary><code>no_rank?</code></summary>
+
+Returns true if the ranking field is `nil`. This means that the model has no rank yet.
+</details>
+
 ## Associations and Grouping
 
 Often times you come in a situation where you don't want to order all items in one collection. Lexorank will take care of this by grouping your models by a specified column. This is especially interesting when your model is associated with another one.
