@@ -1,6 +1,6 @@
 # lexorank
 
-Easily store user-defined order of your ActiveRecord models utilizing lexicographical sorting
+Easily store user-defined order of your ActiveRecord models utilizing lexicographical sorting. A live demo is available [here](https://lexorank.richardboeh.me).
 
 Inspired by [Atlassian's Lexorank](https://confluence.atlassian.com/jirakb/understand-the-lexorank-managment-page-in-jira-server-779159218.html).
 
