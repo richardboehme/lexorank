@@ -10,3 +10,6 @@
 /docs/examples.drawio
 *.gem
 Gemfile.lock
+docker-compose.yml
+/test/database.yml
+/data/

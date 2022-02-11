@@ -22,8 +22,12 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'shoulda-context'
   if defined?(JRUBY_VERSION)
     spec.add_development_dependency 'activerecord-jdbcsqlite3-adapter'
+    spec.add_development_dependency 'activerecord-jdbcmysql-adapter'
+    spec.add_development_dependency 'activerecord-jdbcpostgresql-adapter'
   else
     spec.add_development_dependency 'sqlite3'
+    spec.add_development_dependency 'mysql2'
+    spec.add_development_dependency 'pg'
   end
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'minitest'
