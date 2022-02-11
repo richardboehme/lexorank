@@ -35,6 +35,54 @@ end
 ```
 </details>
 
+**Important:** After the migration was created, take a look at the following paragraphs highlighting differences between the different database adapters:
+* [MySQL](#mysql)
+* [PostgreSQL](#postgresql)
+
+After applying the specific options just run the migration using:
+
+    $ rails db:migrate
+
+### MySQL
+
+It's important to choose a [binary collation](https://dev.mysql.com/doc/refman/8.0/en/charset-binary-collations.html) for the database column.
+The simplest one to use, which we recommend and test against, is the `ascii_bin` collation.
+
+<details>
+<summary>You can specify it like this:</summary>
+
+```ruby
+class AddRankToPages < ActiveRecord::Migration[6.1]
+  def change
+    add_column :pages, :rank, :text, collation: 'ascii_bin'
+    add_index :pages, :rank, unique: true
+  end
+end
+```
+</details>
+
+### PostgreSQL
+
+It's important to use the `C` collation which supports ordering in the same way ruby does for strings.
+You can specify it like this:
+
+<details>
+<summary>You can specify it like this:</summary>
+
+```ruby
+class AddRankToPages < ActiveRecord::Migration[6.1]
+  def change
+    add_column :pages, :rank, :text, collation: 'C'
+    add_index :pages, :rank, unique: true
+  end
+end
+```
+</details>
+
+### SQLite
+
+There are no additional steps needed if you use SQLite.
+
 ## Basic Usage
 
 In your model require `lexorank/rankable`. Afterwards, you will be able to use the `rank!` method like this:
