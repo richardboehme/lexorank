@@ -330,7 +330,10 @@ Bug reports and pull requests are highly welcomed and appreciated. This project 
 
 * Install dependencies using `bundle install`
 * Run all tests using `bundle exec rake test`
-* Run a specifc test using `m path_to_file:line`
+* Run a specific test using `m path_to_file:line`
+* Run tests using a specific database adapter `DB=[sqlite,mysql,postgresql] bundle exec rake test`
+
+Setting up the different database adapter environments *should* be as simple as copying `docker-compose.yml.example` to `docker-compose.yml` and `test/database.yml.example` to `test/database.yml` and running `docker-compose up -d`.
 </details>
 
 <details>
@@ -340,7 +343,7 @@ Bug reports and pull requests are highly welcomed and appreciated. This project 
 2. Add changelog entries
 3. Push changes to github
 4. Create a release on github and create a tag for the version (v0.1.0 for example).
-4. Build gem and push to rubygems.org
+5. Build gem and push to rubygems.org
 </details>
 
 ## Changelog
