@@ -26,7 +26,7 @@ One way to add this in a rails application is to generate a simple migration:
 <summary>This should generate a migration like that:</summary>
 
 ```ruby
-class AddRankToPages < ActiveRecord::Migration[6.1]
+class AddRankToPages < ActiveRecord::Migration[7.0]
   def change
     add_column :pages, :rank, :text
     add_index :pages, :rank, unique: true
@@ -52,7 +52,7 @@ The simplest one to use, which we recommend and test against, is the `ascii_bin`
 <summary>You can specify it like this:</summary>
 
 ```ruby
-class AddRankToPages < ActiveRecord::Migration[6.1]
+class AddRankToPages < ActiveRecord::Migration[7.0]
   def change
     add_column :pages, :rank, :text, collation: 'ascii_bin'
     add_index :pages, :rank, unique: true
@@ -70,7 +70,7 @@ You can specify it like this:
 <summary>You can specify it like this:</summary>
 
 ```ruby
-class AddRankToPages < ActiveRecord::Migration[6.1]
+class AddRankToPages < ActiveRecord::Migration[7.0]
   def change
     add_column :pages, :rank, :text, collation: 'C'
     add_index :pages, :rank, unique: true
