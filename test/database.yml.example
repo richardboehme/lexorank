@@ -1,0 +1,15 @@
+sqlite:
+  adapter: sqlite3
+  database: "file:memdb1?mode=memory&cache=shared"
+mysql:
+  adapter: mysql2
+  host: 127.0.0.1
+  username: root
+  password: lexorank
+  database: lexorank
+postgresql:
+  adapter: postgresql
+  host: localhost
+  user: lexorank
+  password: lexorank
+  database: lexorank

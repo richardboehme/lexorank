@@ -13,13 +13,19 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        ruby: [ 2.3, 2.4, 2.5, 2.6, 2.7, '3.0', '3.1', head, truffleruby, truffleruby-head, jruby, jruby-head ]
+        ruby: [ 2.6, 2.7, '3.0', '3.1', head, truffleruby, jruby ]
+        db_adapter: [ sqlite, mysql, postgresql ]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
+      - run: mv test/database.yml.example test/database.yml
+      - run: mv docker-compose.yml.example docker-compose.yml
+        if: ${{ matrix.db_adapter == 'mysql' || matrix.db_adapter == 'postgresql' }}
+      - run: docker-compose up -d ${{ matrix.db_adapter }}
+        if: ${{ matrix.db_adapter == 'mysql' || matrix.db_adapter == 'postgresql' }}
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - run: bundle exec rake
+      - run: DB=${{ matrix.db_adapter }} bundle exec rake
         continue-on-error: ${{ endsWith(matrix.ruby, 'head') }}

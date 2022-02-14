@@ -26,7 +26,7 @@ One way to add this in a rails application is to generate a simple migration:
 <summary>This should generate a migration like that:</summary>
 
 ```ruby
-class AddRankToPages < ActiveRecord::Migration[6.1]
+class AddRankToPages < ActiveRecord::Migration[7.0]
   def change
     add_column :pages, :rank, :text
     add_index :pages, :rank, unique: true
@@ -34,6 +34,54 @@ class AddRankToPages < ActiveRecord::Migration[6.1]
 end
 ```
 </details>
+
+**Important:** After the migration was created, take a look at the following paragraphs highlighting differences between the different database adapters:
+* [MySQL](#mysql)
+* [PostgreSQL](#postgresql)
+
+After applying the specific options just run the migration using:
+
+    $ rails db:migrate
+
+### MySQL
+
+It's important to choose a [binary collation](https://dev.mysql.com/doc/refman/8.0/en/charset-binary-collations.html) for the database column.
+The simplest one to use, which we recommend and test against, is the `ascii_bin` collation.
+
+<details>
+<summary>You can specify it like this:</summary>
+
+```ruby
+class AddRankToPages < ActiveRecord::Migration[7.0]
+  def change
+    add_column :pages, :rank, :text, collation: 'ascii_bin'
+    add_index :pages, :rank, unique: true
+  end
+end
+```
+</details>
+
+### PostgreSQL
+
+It's important to use the `C` collation which supports ordering in the same way ruby does for strings.
+You can specify it like this:
+
+<details>
+<summary>You can specify it like this:</summary>
+
+```ruby
+class AddRankToPages < ActiveRecord::Migration[7.0]
+  def change
+    add_column :pages, :rank, :text, collation: 'C'
+    add_index :pages, :rank, unique: true
+  end
+end
+```
+</details>
+
+### SQLite
+
+There are no additional steps needed if you use SQLite.
 
 ## Basic Usage
 
@@ -282,7 +330,10 @@ Bug reports and pull requests are highly welcomed and appreciated. This project 
 
 * Install dependencies using `bundle install`
 * Run all tests using `bundle exec rake test`
-* Run a specifc test using `m path_to_file:line`
+* Run a specific test using `m path_to_file:line`
+* Run tests using a specific database adapter `DB=[sqlite,mysql,postgresql] bundle exec rake test`
+
+Setting up the different database adapter environments *should* be as simple as copying `docker-compose.yml.example` to `docker-compose.yml` and `test/database.yml.example` to `test/database.yml` and running `docker-compose up -d`.
 </details>
 
 <details>
@@ -292,7 +343,7 @@ Bug reports and pull requests are highly welcomed and appreciated. This project 
 2. Add changelog entries
 3. Push changes to github
 4. Create a release on github and create a tag for the version (v0.1.0 for example).
-4. Build gem and push to rubygems.org
+5. Build gem and push to rubygems.org
 </details>
 
 ## Changelog
