@@ -1,11 +1,13 @@
 inherit_gem:
   ruboconf: ruboconf.yml
 AllCops:
+  inherit_mode:
+    merge:
+      - Exclude
   Exclude:
     - 'data/**/*'
     - 'test/schema.rb'
     - 'bin/**/*'
-  SuggestExtensions: false
 Lint/ConstantDefinitionInBlock:
   Exclude:
     - 'test/**/*'
