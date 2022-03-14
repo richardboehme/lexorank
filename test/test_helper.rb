@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 $LOAD_PATH.unshift File.expand_path('../lib', __dir__)
 require 'lexorank'
 
@@ -9,7 +11,7 @@ require 'minitest/reporters'
 
 Minitest::Reporters.use!([Minitest::Reporters::DefaultReporter.new(color: true)])
 
-db_config = YAML.load_file(File.expand_path("../database.yml", __FILE__)).fetch(ENV["DB"] || "sqlite")
+db_config = YAML.load_file(File.expand_path('database.yml', __dir__)).fetch(ENV['DB'] || 'sqlite')
 ActiveRecord::Base.establish_connection(db_config)
 ActiveRecord::Schema.verbose = false
 load 'schema.rb'
@@ -21,7 +23,6 @@ require 'models/grouped_paragraph'
 class Minitest::Test
   include Shoulda::Context::DSL
 
-
   def teardown
     tables =
       if ActiveRecord::VERSION::MAJOR >= 5
@@ -30,13 +31,12 @@ class Minitest::Test
         ActiveRecord::Base.connection.tables
       end
 
-
     tables.each do |table|
       if ActiveRecord::VERSION::MAJOR > 5
         ActiveRecord::Base.connection.truncate(table)
       else
         case ActiveRecord::Base.connection.adapter_name.downcase.to_sym
-        when :mysql2 || :postgresql
+        when :mysql2 || :postgresql # rubocop:disable Naming/VariableNumber
           ActiveRecord::Base.connection.execute("TRUNCATE #{ActiveRecord::Base.connection.quote_table_name(table)}")
         when :sqlite
           ActiveRecord::Base.connection.execute("DELETE FROM #{ActiveRecord::Base.connection.quote_table_name(table)}")
@@ -46,7 +46,6 @@ class Minitest::Test
       end
     end
   end
-
 
   def assert_not(condition)
     assert !condition
@@ -73,7 +72,7 @@ class Minitest::Test
     create_sample_docs(
       count: count,
       clazz: clazz,
-      create_with: { page: page },
+      create_with: { page: page }
     )
   end
 end
