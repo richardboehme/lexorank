@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class ScopeTest < ActiveSupport::TestCase
-
   should 'filter out nil ranked entries' do
     Page.create
     assert Page.ranked.empty?
@@ -29,7 +30,6 @@ class ScopeTest < ActiveSupport::TestCase
     error = assert_raises(ArgumentError) do
       Page.ranked(direction: :foo)
     end
-    assert_match "Direction \"foo\" is invalid", error.message
+    assert_match 'Direction "foo" is invalid', error.message
   end
-
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 $LOAD_PATH.unshift File.expand_path('../lib', __dir__)
 require 'pry'
 require 'active_record'
@@ -19,13 +21,13 @@ $unbalanced_table_name = SecureRandom.hex
 
 ActiveRecord::Schema.define do
   create_table $balanced_table_name, force: :cascade do |t|
-    t.string "rank"
-    t.index ["rank"], name: "index_balanceds_on_rank", unique: true
+    t.string 'rank'
+    t.index ['rank'], name: 'index_balanceds_on_rank', unique: true
   end
 
   create_table $unbalanced_table_name, force: :cascade do |t|
-    t.string "rank"
-    t.index ["rank"], name: "index_unbalanceds_on_rank", unique: true
+    t.string 'rank'
+    t.index ['rank'], name: 'index_unbalanceds_on_rank', unique: true
   end
 end
 
@@ -50,7 +52,7 @@ ActiveRecord::Base.transaction do
     balanced.move_to(needed)
     balanced.save
 
-    if needed == 0
+    if needed.zero?
       # we need count + 1
       needed = n + 2
     end
@@ -59,8 +61,8 @@ ActiveRecord::Base.transaction do
     unbalanced.move_to(n % 2)
     unbalanced.save
 
-    if (n + 1) % 100 == 0
-      puts "created #{(n + 1)} records"
+    if ((n + 1) % 100).zero?
+      puts "created #{n + 1} records"
     end
   end
 end
@@ -72,8 +74,8 @@ def clear_active_record_cache
 end
 
 Benchmark.bmbm do |x|
-  x.report("Clear cache #1: ") { clear_active_record_cache }
-  x.report("Unbalanced: ") { Unbalanced.ranked.to_a }
-  x.report("Clear cache #2: ") { clear_active_record_cache }
-  x.report("Balanced: ") { Balanced.ranked.to_a }
+  x.report('Clear cache #1: ') { clear_active_record_cache }
+  x.report('Unbalanced: ') { Unbalanced.ranked.to_a }
+  x.report('Clear cache #2: ') { clear_active_record_cache }
+  x.report('Balanced: ') { Balanced.ranked.to_a }
 end

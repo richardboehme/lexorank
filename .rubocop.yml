@@ -1,0 +1,14 @@
+inherit_gem:
+  ruboconf: ruboconf.yml
+AllCops:
+  Exclude:
+    - 'data/**/*'
+    - 'test/schema.rb'
+    - 'bin/**/*'
+  SuggestExtensions: false
+Lint/ConstantDefinitionInBlock:
+  Exclude:
+    - 'test/**/*'
+Style/GlobalVars:
+  Exclude:
+    - 'benchmarks/**/*'

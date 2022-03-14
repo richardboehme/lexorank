@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class GroupByTest < ActiveSupport::TestCase
@@ -22,7 +24,7 @@ class GroupByTest < ActiveSupport::TestCase
     assert_equal :page_id, GroupedParagraph.ranking_group_by
 
     class Paragraph2 < ActiveRecord::Base
-      self.table_name = "paragraphs"
+      self.table_name = 'paragraphs'
       belongs_to :page
       rank!(group_by: :page)
     end
@@ -32,7 +34,7 @@ class GroupByTest < ActiveSupport::TestCase
   should 'warn on invalid ranking field' do
     _, err = capture_io do
       class Paragraph3 < ActiveRecord::Base
-        self.table_name = "paragraphs"
+        self.table_name = 'paragraphs'
         rank!(group_by: :foo)
       end
     end
@@ -42,45 +44,45 @@ class GroupByTest < ActiveSupport::TestCase
 
   describe 'moving to a different group' do
     should 'insert into middle' do
-      page1, page2 = create_sample_pages(count: 2)
-      paragraph1, paragraph2, paragraph3 = create_sample_paragraphs(page1, clazz: GroupedParagraph)
+      page_1, page_2 = create_sample_pages(count: 2)
+      paragraph_1, paragraph_2, paragraph_3 = create_sample_paragraphs(page_1, clazz: GroupedParagraph)
 
-      new_paragraph = create_sample_paragraphs(page2, count: 1, clazz: GroupedParagraph).first
+      new_paragraph = create_sample_paragraphs(page_2, count: 1, clazz: GroupedParagraph).first
 
-      new_paragraph.page = page1
+      new_paragraph.page = page_1
       new_paragraph.move_to(2)
       new_paragraph.save!
 
-      expected = [paragraph1, paragraph2, new_paragraph,  paragraph3]
-      assert_equal expected, GroupedParagraph.where(page_id: page1.id).ranked
+      expected = [paragraph_1, paragraph_2, new_paragraph, paragraph_3]
+      assert_equal expected, GroupedParagraph.where(page_id: page_1.id).ranked
     end
 
     should 'insert at top' do
-      page1, page2 = create_sample_pages(count: 2)
-      paragraph1, paragraph2, paragraph3 = create_sample_paragraphs(page1, clazz: GroupedParagraph)
+      page_1, page_2 = create_sample_pages(count: 2)
+      paragraph_1, paragraph_2, paragraph_3 = create_sample_paragraphs(page_1, clazz: GroupedParagraph)
 
-      new_paragraph = create_sample_paragraphs(page2, count: 1, clazz: GroupedParagraph).first
+      new_paragraph = create_sample_paragraphs(page_2, count: 1, clazz: GroupedParagraph).first
 
-      new_paragraph.page = page1
+      new_paragraph.page = page_1
       new_paragraph.move_to(0)
       new_paragraph.save!
 
-      expected = [new_paragraph, paragraph1, paragraph2,  paragraph3]
-      assert_equal expected, GroupedParagraph.where(page_id: page1.id).ranked
+      expected = [new_paragraph, paragraph_1, paragraph_2, paragraph_3]
+      assert_equal expected, GroupedParagraph.where(page_id: page_1.id).ranked
     end
 
     should 'insert at the end' do
-      page1, page2 = create_sample_pages(count: 2)
-      paragraph1, paragraph2, paragraph3 = create_sample_paragraphs(page1, clazz: GroupedParagraph)
+      page_1, page_2 = create_sample_pages(count: 2)
+      paragraph_1, paragraph_2, paragraph_3 = create_sample_paragraphs(page_1, clazz: GroupedParagraph)
 
-      new_paragraph = create_sample_paragraphs(page2, count: 1, clazz: GroupedParagraph).first
+      new_paragraph = create_sample_paragraphs(page_2, count: 1, clazz: GroupedParagraph).first
 
-      new_paragraph.page = page1
+      new_paragraph.page = page_1
       new_paragraph.move_to(3)
       new_paragraph.save!
 
-      expected = [paragraph1, paragraph2,  paragraph3, new_paragraph]
-      assert_equal expected, GroupedParagraph.where(page_id: page1.id).ranked
+      expected = [paragraph_1, paragraph_2, paragraph_3, new_paragraph]
+      assert_equal expected, GroupedParagraph.where(page_id: page_1.id).ranked
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'lexorank'
 require 'active_support/concern'
 
@@ -17,9 +19,9 @@ module Lexorank::Rankable
       end
 
       if @ranking_column
-        self.scope :ranked, ->(direction: :asc) { where.not("#{field}": nil).order("#{field}": direction) }
-        self.include Lexorank
-        self.include InstanceMethods
+        scope :ranked, ->(direction: :asc) { where.not("#{field}": nil).order("#{field}": direction) }
+        include Lexorank
+        include InstanceMethods
       else
         warn "The supplied ranking column \"#{field}\" is not a column of the model!"
       end
@@ -29,15 +31,15 @@ module Lexorank::Rankable
 
     def check_column(column_name)
       return unless column_name
+
       # This requires an active connection... do we want this?
-      if self.columns.map(&:name).include?(column_name.to_s)
+      if columns.map(&:name).include?(column_name.to_s)
         column_name
       # This requires rank! to be after the specific association
-      elsif (association = self.reflect_on_association(column_name))
+      elsif (association = reflect_on_association(column_name))
         association.foreign_key.to_sym
       end
     end
-
   end
 
   module InstanceMethods
@@ -57,20 +59,20 @@ module Lexorank::Rankable
       # when moving to the end of the collection the offset and limit statement automatically handles
       # that 'after' is nil which is the same like [collection.last, nil]
       before, after =
-        if position == 0
+        if position.zero?
           [nil, collection.first]
         else
-          collection.where.not(id: self.id).offset(position - 1).limit(2)
+          collection.where.not(id: id).offset(position - 1).limit(2)
         end
 
       rank =
-        if self == after && self.send(self.class.ranking_column).present?
-          self.send(self.class.ranking_column)
+        if self == after && send(self.class.ranking_column).present?
+          send(self.class.ranking_column)
         else
           value_between(before&.send(self.class.ranking_column), after&.send(self.class.ranking_column))
         end
 
-      self.send("#{self.class.ranking_column}=", rank)
+      send("#{self.class.ranking_column}=", rank)
     end
 
     def move_to!(position)
@@ -83,10 +85,9 @@ module Lexorank::Rankable
     end
 
     def no_rank?
-      !self.send(self.class.ranking_column)
+      !send(self.class.ranking_column)
     end
   end
-
 end
-ActiveRecord::Base.send(:include, Lexorank::Rankable)
 
+ActiveRecord::Base.include Lexorank::Rankable
