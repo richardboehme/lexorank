@@ -7,9 +7,10 @@ gemspec
 
 gem 'shoulda-context'
 if defined?(JRUBY_VERSION)
-  gem 'activerecord-jdbcmysql-adapter'
-  gem 'activerecord-jdbcpostgresql-adapter'
-  gem 'activerecord-jdbcsqlite3-adapter'
+  gem 'activerecord', '~> 7.0.0'
+  gem 'activerecord-jdbcmysql-adapter', '~> 70.0', platforms: :jruby
+  gem 'activerecord-jdbcpostgresql-adapter', '~> 70.0', platforms: :jruby
+  gem 'activerecord-jdbcsqlite3-adapter', '~> 70.0', platforms: :jruby
 else
   gem 'mysql2'
   gem 'pg'
