@@ -7,10 +7,16 @@ module Lexorank::Rankable
   extend ActiveSupport::Concern
 
   module ClassMethods
-    attr_reader :ranking_column, :ranking_group_by
+    attr_reader :ranking_column, :ranking_group_by, :ranking_advisory_lock_config
 
-    def rank!(field: :rank, group_by: nil)
+    def rank!(field: :rank, group_by: nil, advisory_lock: {})
       @ranking_column = check_column(field)
+      @ranking_advisory_lock_config = { enabled: respond_to?(:with_advisory_lock) }.merge(advisory_lock)
+
+      if ranking_advisory_lock_config[:enabled] && !respond_to?(:with_advisory_lock)
+        raise Lexorank::InvalidConfigError, "Cannot enable advisory lock if #{name} does not respond to #with_advisory_lock. Consider installing the with_advisory_lock gem (https://rubygems.org/gems/with_advisory_lock)."
+      end
+
       if group_by
         @ranking_group_by = check_column(group_by)
         unless @ranking_group_by
@@ -43,11 +49,20 @@ module Lexorank::Rankable
   end
 
   module InstanceMethods
-    def move_to_top
-      move_to(0)
+    def move_to_top(&block)
+      move_to(0, &block)
     end
 
     def move_to(position)
+      if block_given? && lexorank_advisory_locks_enabled?
+        advisory_lock_options = self.class.ranking_advisory_lock_config.except(:enabled, :lock_name)
+
+        return self.class.with_advisory_lock(lexorank_advisory_lock_name, **advisory_lock_options) do
+          move_to(position)
+          yield
+        end
+      end
+
       collection = self.class.ranked
       if self.class.ranking_group_by.present?
         collection = collection.where("#{self.class.ranking_group_by}": send(self.class.ranking_group_by))
@@ -73,11 +88,18 @@ module Lexorank::Rankable
         end
 
       send(:"#{self.class.ranking_column}=", rank)
+
+      if block_given?
+        yield
+      else
+        rank
+      end
     end
 
     def move_to!(position)
-      move_to(position)
-      save
+      move_to(position) do
+        save
+      end
     end
 
     def move_to_top!
@@ -86,6 +108,24 @@ module Lexorank::Rankable
 
     def no_rank?
       !send(self.class.ranking_column)
+    end
+
+    private
+
+    def lexorank_advisory_locks_enabled?
+      self.class.respond_to?(:with_advisory_lock) && self.class.ranking_advisory_lock_config[:enabled]
+    end
+
+    def lexorank_advisory_lock_name
+      if self.class.ranking_advisory_lock_config[:lock_name].present?
+        self.class.ranking_advisory_lock_config[:lock_name].(self)
+      else
+        "#{self.class.table_name}_update_#{self.class.ranking_column}".tap do |name|
+          if self.class.ranking_group_by.present?
+            name << "_group_#{send(self.class.ranking_group_by)}"
+          end
+        end
+      end
     end
   end
 end

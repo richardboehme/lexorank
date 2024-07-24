@@ -16,7 +16,7 @@ class ScopeTest < ActiveSupport::TestCase
   end
 
   should 'consider custom ranking column' do
-    class Page1 < ActiveRecord::Base
+    class Page1 < Base
       self.table_name = 'pages'
       rank!(field: :other_ranking_field)
     end

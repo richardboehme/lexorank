@@ -2,7 +2,7 @@
 
 require 'lexorank/rankable'
 
-class Paragraph < ActiveRecord::Base
+class Paragraph < Base
   belongs_to :page
 
   rank!(group_by: :page)

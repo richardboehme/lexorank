@@ -2,7 +2,7 @@
 
 require 'lexorank/rankable'
 
-class Page < ActiveRecord::Base
+class Page < Base
   rank!
 
   has_many :paragraphs
