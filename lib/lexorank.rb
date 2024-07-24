@@ -26,6 +26,7 @@ require 'lexorank/version'
 # SOFTWARE.
 module Lexorank
   class InvalidRankError < StandardError; end
+  class InvalidConfigError < StandardError; end
 
   MIN_CHAR = '0'
   MAX_CHAR = 'z'

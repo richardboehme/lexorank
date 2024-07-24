@@ -16,6 +16,7 @@ ActiveRecord::Base.establish_connection(db_config)
 ActiveRecord::Schema.verbose = false
 load 'schema.rb'
 
+require 'models/base'
 require 'models/page'
 require 'models/paragraph'
 require 'models/grouped_paragraph'
@@ -49,6 +50,26 @@ class Minitest::Test
 
   def assert_not(condition)
     assert !condition
+  end
+
+  def assert_advisory_locked_with(clazz, args = nil)
+    clazz.advisory_locked_with = nil
+
+    yield
+
+    unless args.nil?
+      assert_equal args, clazz.advisory_locked_with
+    end
+  end
+
+  def assert_advisory_locked(clazz, &block)
+    assert_advisory_locked_with clazz, &block
+  end
+
+  def assert_no_advisory_lock(clazz)
+    clazz.advisory_locked_with = nil
+    yield
+    assert_nil clazz.advisory_locked_with
   end
 
   def create_sample_docs(count:, clazz:, create_with: {})

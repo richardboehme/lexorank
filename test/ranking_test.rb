@@ -34,7 +34,7 @@ class RankingTest < Minitest::Test
   end
 
   should 'be able to use custom ranking column' do
-    class Page1 < ActiveRecord::Base
+    class Page1 < Base
       self.table_name = 'pages'
       rank!(field: :other_ranking_field)
     end
@@ -51,7 +51,7 @@ class RankingTest < Minitest::Test
 
   should 'report warning on invalid field' do
     _, err = capture_io do
-      class Page2 < ActiveRecord::Base
+      class Page2 < Base
         self.table_name = 'pages'
         rank!(field: :foo)
       end

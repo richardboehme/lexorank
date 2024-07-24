@@ -10,6 +10,7 @@ Add this line to your application's Gemfile:
 
 ```ruby
 gem 'lexorank'
+gem 'with_advisory_lock' # recommended to get locking out of the box
 ```
 
 And then execute:
@@ -129,15 +130,15 @@ end
 
 ## Class methods
 
-
 <details>
-<summary><a id="rank"></a><code>rank!(field: :rank, group_by: nil)</code></summary>
+<summary><a id="rank"></a><code>rank!(field: :rank, group_by: nil, advisory_lock: {})</code></summary>
 
 This is the entry point to use lexorank in your model.
 
 Options:
 * `field`: Allows you to pass a custom field which is being used to store the models rank. (defaults to `:rank`)
 * `group_by`: Makes it possible to split model ordering into groups by a specific column. [Learn more](#associations-and-grouping)
+* `advisory_lock`: The advisory lock configuration. [Learn more](#locking)
 
 </details>
 <details>
@@ -156,10 +157,14 @@ Those will only be available if your model calls `rank!` before.
 
 
 <details>
-<summary><a id="move_to"></a><code>move_to(position)</code></summary>
+<summary><a id="move_to"></a><code>move_to(position, &block)</code></summary>
 
 This method will set your object's rank column according to the new position. Position counts start at zero.
 This will not persist the rank to the database.
+
+The passed block will be executed after the new rank was assigned.
+
+When using [Locking](#locking) it is **discouraged** to use `move_to` without passing a block. The block will be executed inside of the advisory lock and should persist the change to the rank to ensure that no positioning conflicts will occur.
 </details>
 <details>
 <summary><code>move_to_top</code></summary>
@@ -240,6 +245,46 @@ Retrieving data in a grouped manner is as simple as utilizing built-in ActiveRec
 ```ruby
 # This will return all paragraphs of the first page in the supplied order.
 Page.first.paragraphs.ranked
+```
+
+## Locking
+
+Since version 0.2.0 lexorank ships with advisory locking by default. Advisory locks are a locking mechanism on the database level that ensures that only one record in a collection can change their rank at a time. This is important to prevent two records being assigned the same rank.
+
+Advisory locking is enabled by default if the model class responds to the `with_advisory_lock` method. The easiest way to achieve this is by installing the incredible [`with_advisory_lock` gem](https://github.com/ClosureTree/with_advisory_lock).
+
+It is also possible to implement advisory locking yourself. The `with_adivsory_lock` method must accept one name argument and arbitrary keyword arguments similar to the signature of the [`with_advisory_lock` gem](https://github.com/ClosureTree/with_advisory_lock).
+
+With advisory locking enabled it is actively **dicouraged** to call `move_to` or `move_to_top` without a block. This is because those methods do not persist to the database and thus cannot acquire a lock. Make sure the bang equivalents or pass a block in which the record is persisted.
+
+### Opting out of locking
+
+If you manage locking yourself or you do not need locking, you can disable advisory locks:
+
+```ruby
+class Page < ActiveRecord::Base
+  rank!(advisory_lock: { enabled: false })
+end
+```
+
+Note that locking will be disabled by default if the model class does not respond to the `with_advisory_lock` method.
+
+### Configuring locking
+
+The lexorank gem will choose an appropriate lock name by taking the class name, the ranking column and grouping into account. It's still possible to supply a `lock_name` callable that returns a custom name.
+
+```ruby
+class Page < ActiveRecord::Base
+  rank!(advisory_lock: { lock_name: ->(page) { "custom_lock_for_page_#{page.id}" } })
+end
+```
+
+Also it's possible to pass other options (e.g. `timeout_seconds` when using the [`with_advisory_lock` gem](https://github.com/ClosureTree/with_advisory_lock)). All options are passed to the `with_advisory_lock` method as keyword arguments.
+
+```ruby
+class Page < ActiveRecord::Base
+  rank!(advisory_lock: { timeout_seconds: 3 })
+end
 ```
 
 ## Internals - How does lexorank work?
