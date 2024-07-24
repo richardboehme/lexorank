@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
   else
     spec.add_development_dependency 'mysql2'
     spec.add_development_dependency 'pg'
-    spec.add_development_dependency 'sqlite3'
+    spec.add_development_dependency 'sqlite3', '~> 1.4'
   end
   spec.add_development_dependency 'm'
   spec.add_development_dependency 'minitest'
