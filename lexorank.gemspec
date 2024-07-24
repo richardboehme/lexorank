@@ -19,21 +19,4 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'activerecord'
   spec.add_dependency 'activesupport'
-
-  spec.add_development_dependency 'shoulda-context'
-  if defined?(JRUBY_VERSION)
-    spec.add_development_dependency 'activerecord-jdbcmysql-adapter'
-    spec.add_development_dependency 'activerecord-jdbcpostgresql-adapter'
-    spec.add_development_dependency 'activerecord-jdbcsqlite3-adapter'
-  else
-    spec.add_development_dependency 'mysql2'
-    spec.add_development_dependency 'pg'
-    spec.add_development_dependency 'sqlite3', '~> 1.4'
-  end
-  spec.add_development_dependency 'm'
-  spec.add_development_dependency 'minitest'
-  spec.add_development_dependency 'minitest-reporters'
-  spec.add_development_dependency 'pry'
-  spec.add_development_dependency 'rake'
-  spec.add_development_dependency 'ruboconf', '~> 1.3'
 end
