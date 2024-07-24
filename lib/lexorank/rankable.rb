@@ -72,7 +72,7 @@ module Lexorank::Rankable
           value_between(before&.send(self.class.ranking_column), after&.send(self.class.ranking_column))
         end
 
-      send("#{self.class.ranking_column}=", rank)
+      send(:"#{self.class.ranking_column}=", rank)
     end
 
     def move_to!(position)
