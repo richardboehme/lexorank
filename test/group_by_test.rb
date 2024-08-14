@@ -21,14 +21,14 @@ class GroupByTest < ActiveSupport::TestCase
   end
 
   should 'resolve attribute names' do
-    assert_equal :page_id, GroupedParagraph.ranking_group_by
+    assert_equal :page_id, GroupedParagraph.lexorank_ranking.group_by
 
     class Paragraph2 < Base
       self.table_name = 'paragraphs'
       belongs_to :page
       rank!(group_by: :page)
     end
-    assert_equal :page_id, Paragraph2.ranking_group_by
+    assert_equal :page_id, Paragraph2.lexorank_ranking.group_by
   end
 
   should 'warn on invalid ranking field' do
@@ -39,7 +39,7 @@ class GroupByTest < ActiveSupport::TestCase
       end
     end
     assert_equal "The supplied grouping by \"foo\" is neither a column nor an association of the model!\n", err
-    assert_nil Paragraph3.ranking_group_by
+    assert_nil Paragraph3.lexorank_ranking.group_by
   end
 
   describe 'moving to a different group' do
