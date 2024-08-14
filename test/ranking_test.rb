@@ -68,9 +68,8 @@ class RankingTest < Minitest::Test
       end
     end
     assert_equal "The supplied ranking column \"foo\" is not a column of the model!\n", err
-    assert_not Page2.method_defined?(:ranked)
-    assert_nil Page2.ranking_column
-    assert_nil Page2.ranking_group_by
+    assert_not Page2.respond_to?(:ranked)
+    assert_not Page2.method_defined?(:move_to)
   end
 
   should 'error out if invalid ranks' do

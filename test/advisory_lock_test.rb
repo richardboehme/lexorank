@@ -26,14 +26,14 @@ class AdvisoryLockTest < ActiveSupport::TestCase
 
       rank!
     end
-    assert_not Page2.ranking_advisory_lock_config[:enabled]
+    assert_not Page2.lexorank_ranking.advisory_lock_config[:enabled]
 
     # This should not raise a NoMethodError
     Page2.new.move_to_top!
   end
 
   should 'enable advisory locks if model responds to #with_advisory_lock' do
-    assert Page.ranking_advisory_lock_config[:enabled]
+    assert Page.lexorank_ranking.advisory_lock_config[:enabled]
 
     assert_advisory_locked Page do
       Page.new.move_to_top!
@@ -47,7 +47,7 @@ class AdvisoryLockTest < ActiveSupport::TestCase
       rank!(advisory_lock: { foo: 'bar', bar: 1 })
     end
 
-    assert_equal({ enabled: true, foo: 'bar', bar: 1 }, Page3.ranking_advisory_lock_config)
+    assert_equal({ enabled: true, foo: 'bar', bar: 1 }, Page3.lexorank_ranking.advisory_lock_config)
 
     instance = Page3.new
     assert_nil Page3.advisory_locked_with
