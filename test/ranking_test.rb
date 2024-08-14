@@ -33,6 +33,17 @@ class RankingTest < Minitest::Test
     assert_equal [page_3, page_1, page_2], Page.ranked
   end
 
+  should 'move to end even if position is larger than collection' do
+    page_1, page_2, page_3 = create_sample_pages
+
+    page_1.move_to!(4)
+    assert_equal [page_2, page_3, page_1], Page.ranked
+
+    # stay the same if current page is already last page
+    page_1.move_to!(5)
+    assert_equal [page_2, page_3, page_1], Page.ranked
+  end
+
   should 'be able to use custom ranking column' do
     class Page1 < Base
       self.table_name = 'pages'

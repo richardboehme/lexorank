@@ -80,8 +80,14 @@ module Lexorank::Rankable
           collection.where.not(id: id).offset(position - 1).limit(2)
         end
 
+      # If position >= collection.size both `before` and `after` will be nil. In this case
+      # we set before to the last element of the collection
+      if before.nil? && after.nil?
+        before = collection.last
+      end
+
       rank =
-        if self == after && send(self.class.ranking_column).present?
+        if (self == after && send(self.class.ranking_column).present?) || (before == self && after.nil?)
           send(self.class.ranking_column)
         else
           value_between(before&.send(self.class.ranking_column), after&.send(self.class.ranking_column))
