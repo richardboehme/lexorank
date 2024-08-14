@@ -14,6 +14,7 @@ Minitest::Reporters.use!([Minitest::Reporters::DefaultReporter.new(color: true)]
 db_config = YAML.load_file(File.expand_path('database.yml', __dir__)).fetch(ENV['DB'] || 'sqlite')
 ActiveRecord::Base.establish_connection(db_config)
 ActiveRecord::Schema.verbose = false
+ActiveRecord::Base.logger = Logger.new('log/test.log')
 load 'schema.rb'
 
 require 'models/base'
