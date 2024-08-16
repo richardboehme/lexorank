@@ -33,6 +33,18 @@ class RankingTest < Minitest::Test
     assert_equal [page_3, page_1, page_2], Page.ranked
   end
 
+  should 'move to end' do
+    page_1, page_2, page_3 = create_sample_pages
+
+    page_1.move_to_end!
+    assert_equal [page_2, page_3, page_1], Page.ranked
+
+    page_2.move_to_end do
+      page_2.save
+    end
+    assert_equal [page_3, page_1, page_2], Page.ranked
+  end
+
   should 'move to end even if position is larger than collection' do
     page_1, page_2, page_3 = create_sample_pages
 
