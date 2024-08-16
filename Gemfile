@@ -14,7 +14,7 @@ if defined?(JRUBY_VERSION)
 else
   gem 'mysql2'
   gem 'pg'
-  gem 'sqlite3', '~> 1.4'
+  gem 'sqlite3'
 end
 gem 'm'
 gem 'minitest'
