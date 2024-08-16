@@ -12,6 +12,5 @@
 Gemfile.lock
 docker-compose.yml
 /test/database.yml
-/data/
 /log/*
 !/log/.keep
