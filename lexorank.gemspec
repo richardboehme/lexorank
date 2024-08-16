@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.summary = 'Store order of your models by using lexicographic sorting.'
   spec.homepage = 'https://github.com/richardboehme/lexorank'
   spec.license = 'MIT'
-  spec.required_ruby_version = Gem::Requirement.new('>= 2.6.0')
+  spec.required_ruby_version = Gem::Requirement.new('>= 3.1.0')
 
   spec.metadata['rubygems_mfa_required'] = 'true'
   spec.metadata['homepage_uri'] = spec.homepage

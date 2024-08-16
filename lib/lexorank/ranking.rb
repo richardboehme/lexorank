@@ -82,11 +82,11 @@ class Lexorank::Ranking
     end
   end
 
-  def with_lock_if_enabled(instance, &block)
+  def with_lock_if_enabled(instance, &)
     if advisory_locks_enabled?
       advisory_lock_options = advisory_lock_config.except(:enabled, :lock_name)
 
-      record_class.with_advisory_lock(advisory_lock_name(instance), **advisory_lock_options, &block)
+      record_class.with_advisory_lock(advisory_lock_name(instance), **advisory_lock_options, &)
     else
       yield
     end
