@@ -8,12 +8,16 @@ Gem::Specification.new do |spec|
   spec.version = Lexorank::VERSION
   spec.authors = ['Richard Böhme']
   spec.email = ['richard.boehme1999@gmail.com']
-  spec.metadata['rubygems_mfa_required'] = 'true'
 
   spec.summary = 'Store order of your models by using lexicographic sorting.'
   spec.homepage = 'https://github.com/richardboehme/lexorank'
   spec.license = 'MIT'
   spec.required_ruby_version = Gem::Requirement.new('>= 2.6.0')
+
+  spec.metadata['rubygems_mfa_required'] = 'true'
+  spec.metadata['homepage_uri'] = spec.homepage
+  spec.metadata['source_code_uri'] = spec.homepage
+  spec.metadata['changelog_uri'] = "#{spec.homepage}/blob/main/CHANGELOG.md"
 
   spec.files = Dir['LICENSE', 'lib/**/*']
 
