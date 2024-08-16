@@ -63,8 +63,8 @@ class Minitest::Test
     end
   end
 
-  def assert_advisory_locked(clazz, &block)
-    assert_advisory_locked_with clazz, &block
+  def assert_advisory_locked(clazz, &)
+    assert_advisory_locked_with(clazz, &)
   end
 
   def assert_no_advisory_lock(clazz)
