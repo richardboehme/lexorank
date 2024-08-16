@@ -7,8 +7,25 @@ and this project tries to adhere to [Semantic Versioning](https://semver.org/spe
 
 ## [Unreleased]
 
+### Major Changes
+
+This version introduces **advisory locks**. Advisory locking is **automatically enabled** if your model class responds to `#with_advisory_lock` (ex. `User.with_advisory_lock`).
+
+From now on the lexorank gem requires ruby version 3.1 or higher. This decision is based on ruby's end of life dates (3.0 went eol in April 2024).
+
+All internal API methods that lexorank was using until 0.1.3 were moved to another location. If you rely on those (and you should not), have a look at the `Lexorank::Ranking` class. An instance of this class can be accessed via the `lexorank_ranking` attribute on your model class.
+
+### Added
+
+- Add advisory locks if the model class responds to `with_advisory_lock`
+- Add `#move_to_end` and `#move_to_end!` to move a record to the end of a collection
+- The CI now runs against multiple database adapters (sqlite, mysql, postgresql)
+
 ### Changed
 
+- Blocks passed to all `move_to` methods will now be executed after the rank was assigned. When using advisory locks, the block will be executed while the lock is still active.
+- When calling `#move_to` with a position that is larger than the number of records in the collection it will now be moved to the end of the list
+- Require ruby version 3.1 or higher
 - Moved Changelog from [README.md](https://github.com/richardboehme/lexorank/blob/main/README.md) to [CHANGELOG.md](https://github.com/richardboehme/lexorank/blob/main/CHANGELOG.md)
 
 ## [0.1.3] - 2021-07-16
