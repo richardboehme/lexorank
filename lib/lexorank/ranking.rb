@@ -52,7 +52,9 @@ class Lexorank::Ranking
     # when moving to the end of the collection the offset and limit statement automatically handles
     # that 'after' is nil which is the same like [collection.last, nil]
     before, after =
-      if position.zero?
+      if position == :last
+        [collection.last, nil]
+      elsif position.zero?
         [nil, collection.first]
       else
         collection.where.not(id: instance.id).offset(position - 1).limit(2)

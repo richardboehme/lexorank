@@ -26,6 +26,10 @@ module Lexorank::Rankable
       move_to(0, &block)
     end
 
+    def move_to_end(&block)
+      self.class.lexorank_ranking.move_to(self, :last, &block)
+    end
+
     def move_to(position, &block)
       self.class.lexorank_ranking.move_to(self, position, &block)
     end
@@ -37,7 +41,15 @@ module Lexorank::Rankable
     end
 
     def move_to_top!
-      move_to!(0)
+      move_to_top do
+        save
+      end
+    end
+
+    def move_to_end!
+      move_to_end do
+        save
+      end
     end
 
     def no_rank?
