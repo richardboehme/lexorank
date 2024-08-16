@@ -391,37 +391,6 @@ Setting up the different database adapter environments *should* be as simple as 
 5. Build gem and push to rubygems.org
 </details>
 
-## Changelog
-
-<details>
-<summary>0.1.3</summary>
-
-* add support to move element into another group ([#5](https://github.com/richardboehme/lexorank/pull/5), by [@bookis](https://github.com/bookis))
-* add the `no_rank?` method ([#5](https://github.com/richardboehme/lexorank/pull/5), by [@bookis](https://github.com/bookis))
-* remove in memory operations with the collection when calling `move_to`
-</details>
-
-<details>
-<summary>0.1.2</summary>
-
-* fix gem specification
-* update changelog format
-</details>
-
-<details>
-<summary>0.1.1</summary>
-
-* update license year
-* let rubygems be happy to have an updated version
-</details>
-
-
-<details>
-<summary>0.1.0</summary>
-
-*Initial Release*
-</details>
-
 ## License
 
 Copyright (c) 2021-2022 Richard Böhme (richard.boehme1999@gmail.com)
