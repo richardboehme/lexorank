@@ -31,17 +31,6 @@ class GroupByTest < ActiveSupport::TestCase
     assert_equal :page_id, Paragraph2.lexorank_ranking.group_by
   end
 
-  should 'warn on invalid ranking field' do
-    _, err = capture_io do
-      class Paragraph3 < Base
-        self.table_name = 'paragraphs'
-        rank!(group_by: :foo)
-      end
-    end
-    assert_equal "The supplied grouping by \"foo\" is neither a column nor an association of the model!\n", err
-    assert_nil Paragraph3.lexorank_ranking.group_by
-  end
-
   describe 'moving to a different group' do
     should 'insert into middle' do
       page_1, page_2 = create_sample_pages(count: 2)

@@ -3,13 +3,11 @@
 class Lexorank::Ranking
   include Lexorank
 
-  attr_reader :record_class, :original_field, :field, :original_group_by, :group_by, :advisory_lock_config
+  attr_reader :record_class, :field, :group_by, :advisory_lock_config
 
   def initialize(record_class:, field:, group_by:, advisory_lock:)
     @record_class = record_class
-    @original_field = field
-    @field = process_column_name(field)
-    @original_group_by = group_by
+    @field = field
     @group_by = process_group_by_column_name(group_by)
     @advisory_lock_config = { enabled: record_class.respond_to?(:with_advisory_lock) }.merge(advisory_lock)
   end
@@ -23,13 +21,9 @@ class Lexorank::Ranking
       )
     end
 
-    unless @field
+    unless field
       # TODO: Make this raise an error. Supplying an invalid column should raise.
-      warn "The supplied ranking column \"#{@original_field}\" is not a column of the model!"
-    end
-
-    if original_group_by && !group_by
-      warn "The supplied grouping by \"#{original_group_by}\" is neither a column nor an association of the model!"
+      warn 'The supplied ranking column cannot be "nil"!'
     end
   end
 
@@ -110,23 +104,12 @@ class Lexorank::Ranking
 
   private
 
-  def process_column_name(name)
-    return unless name
-
-    # This requires an active connection... do we want this?
-    if record_class.columns.map(&:name).include?(name.to_s)
-      name
-    end
-  end
-
   def process_group_by_column_name(name)
-    processed_name = process_column_name(name)
-
     # This requires rank! to be after the specific association
-    if name && !processed_name && (association = record_class.reflect_on_association(name))
+    if name && (association = record_class.reflect_on_association(name))
       association.foreign_key.to_sym
     else
-      processed_name
+      name
     end
   end
 end
