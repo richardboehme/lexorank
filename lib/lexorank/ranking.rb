@@ -22,8 +22,10 @@ class Lexorank::Ranking
     end
 
     unless field
-      # TODO: Make this raise an error. Supplying an invalid column should raise.
-      warn 'The supplied ranking column cannot be "nil"!'
+      raise(
+        Lexorank::InvalidConfigError,
+        'The supplied ":field" option cannot be "nil"!'
+      )
     end
   end
 
