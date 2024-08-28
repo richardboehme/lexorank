@@ -73,13 +73,14 @@ class RankingTest < Minitest::Test
   end
 
   should 'report warning if field is nil' do
-    _, err = capture_io do
-      class Page2 < Base
-        self.table_name = 'pages'
-        rank!(field: nil)
+    error =
+      assert_raises Lexorank::InvalidConfigError do
+        class Page2 < Base
+          self.table_name = 'pages'
+          rank!(field: nil)
+        end
       end
-    end
-    assert_equal "The supplied ranking column cannot be \"nil\"!\n", err
+    assert_equal 'The supplied ":field" option cannot be "nil"!', error.message
     assert_not Page2.respond_to?(:ranked)
     assert_not Page2.method_defined?(:move_to)
   end
