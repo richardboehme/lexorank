@@ -9,8 +9,8 @@ and this project tries to adhere to [Semantic Versioning](https://semver.org/spe
 
 ### Changed
 
-* Raise an error if `nil` is passed for the `:field` option. (#16)
-* Calling `rank!` with an invalid column name, by either specifying the `:field` or `:group_by` option, will not issue a warning anymore. This also means the gem does not require an active database connection when loading classes. (#16)
+* Raise an error if `nil` is passed for the `:field` option. ([#16](https://github.com/richardboehme/lexorank/pull/16))
+* Calling `rank!` with an invalid column name, by either specifying the `:field` or `:group_by` option, will not issue a warning anymore. This also means the gem does not require an active database connection when loading classes. ([#16](https://github.com/richardboehme/lexorank/pull/16))
 
 ## [0.2.0] - 2024-08-16
 
