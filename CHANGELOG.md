@@ -5,12 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project tries to adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [0.3.0] - 2024-08-28
 
 ### Changed
 
-* Raise an error if `nil` is passed for the `:field` option.
-* Calling `rank!` with an invalid column name, by either specifying the `:field` or `:group_by` option, will not issue a warning anymore. This also means the gem does not require an active database connection when loading classes.
+* Raise an error if `nil` is passed for the `:field` option. (#16)
+* Calling `rank!` with an invalid column name, by either specifying the `:field` or `:group_by` option, will not issue a warning anymore. This also means the gem does not require an active database connection when loading classes. (#16)
 
 ## [0.2.0] - 2024-08-16
 
