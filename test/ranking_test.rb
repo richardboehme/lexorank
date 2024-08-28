@@ -72,14 +72,14 @@ class RankingTest < Minitest::Test
     assert_not page.rank
   end
 
-  should 'report warning on invalid field' do
+  should 'report warning if field is nil' do
     _, err = capture_io do
       class Page2 < Base
         self.table_name = 'pages'
-        rank!(field: :foo)
+        rank!(field: nil)
       end
     end
-    assert_equal "The supplied ranking column \"foo\" is not a column of the model!\n", err
+    assert_equal "The supplied ranking column cannot be \"nil\"!\n", err
     assert_not Page2.respond_to?(:ranked)
     assert_not Page2.method_defined?(:move_to)
   end
