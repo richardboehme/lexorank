@@ -21,7 +21,7 @@ jobs:
       - run: mv test/database.yml.example test/database.yml
       - run: mv docker-compose.yml.example docker-compose.yml
         if: ${{ matrix.db_adapter == 'mysql' || matrix.db_adapter == 'postgresql' }}
-      - run: docker compose up -d ${{ matrix.db_adapter }}
+      - run: docker compose up -d --wait ${{ matrix.db_adapter }}
         if: ${{ matrix.db_adapter == 'mysql' || matrix.db_adapter == 'postgresql' }}
       - uses: ruby/setup-ruby@v1
         with:
