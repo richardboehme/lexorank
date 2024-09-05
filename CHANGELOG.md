@@ -7,9 +7,13 @@ and this project tries to adhere to [Semantic Versioning](https://semver.org/spe
 
 ## Unreleased
 
+...
+
+## [0.4.0] - 2024-09-05
+
 ### Changed
 
-* Allow passing options to all `move_to*` methods. This allows for options being passed to the `::with_advisory_lock` method. For example calling `move_to!(2, advisory_lock: { timeout_seconds: 30 })` will call `with_advisory_lock(lock_name, timeout_seconds: 30)`, changing the `timeout_seconds` option for this single advisory lock.
+* Allow passing options to all `move_to*` methods. This allows for options being passed to the `::with_advisory_lock` method. For example calling `move_to!(2, advisory_lock: { timeout_seconds: 30 })` will call `with_advisory_lock(lock_name, timeout_seconds: 30)`, changing the `timeout_seconds` option for this single advisory lock. ([#17](https://github.com/richardboehme/lexorank/pull/17))
 
 ## [0.3.0] - 2024-08-28
 
