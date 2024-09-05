@@ -22,32 +22,32 @@ module Lexorank::Rankable
   end
 
   module InstanceMethods
-    def move_to_top(&)
-      move_to(0, &)
+    def move_to_top(...)
+      move_to(0, ...)
     end
 
-    def move_to_end(&)
-      self.class.lexorank_ranking.move_to(self, :last, &)
+    def move_to_end(...)
+      self.class.lexorank_ranking.move_to(self, :last, ...)
     end
 
-    def move_to(position, &)
-      self.class.lexorank_ranking.move_to(self, position, &)
+    def move_to(...)
+      self.class.lexorank_ranking.move_to(self, ...)
     end
 
-    def move_to!(position)
-      move_to(position) do
+    def move_to!(position, **options)
+      move_to(position, **options) do
         save
       end
     end
 
-    def move_to_top!
-      move_to_top do
+    def move_to_top!(**options)
+      move_to_top(**options) do
         save
       end
     end
 
-    def move_to_end!
-      move_to_end do
+    def move_to_end!(**options)
+      move_to_end(**options) do
         save
       end
     end

@@ -29,10 +29,10 @@ class Lexorank::Ranking
     end
   end
 
-  def move_to(instance, position)
+  def move_to(instance, position, **options)
     if block_given? && advisory_locks_enabled?
-      return with_lock_if_enabled(instance) do
-        move_to(instance, position)
+      return with_lock_if_enabled(instance, **options.fetch(:advisory_lock, {})) do
+        move_to(instance, position, **options)
         yield
       end
     end
@@ -78,9 +78,9 @@ class Lexorank::Ranking
     end
   end
 
-  def with_lock_if_enabled(instance, &)
+  def with_lock_if_enabled(instance, **options, &)
     if advisory_locks_enabled?
-      advisory_lock_options = advisory_lock_config.except(:enabled, :lock_name)
+      advisory_lock_options = advisory_lock_config.except(:enabled, :lock_name).merge(options)
 
       record_class.with_advisory_lock(advisory_lock_name(instance), **advisory_lock_options, &)
     else

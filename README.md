@@ -157,33 +157,35 @@ Those will only be available if your model calls `rank!` before.
 
 
 <details>
-<summary><a id="move_to"></a><code>move_to(position, &block)</code></summary>
+<summary><a id="move_to"></a><code>move_to(position, **options, &block)</code></summary>
 
 This method will set your object's rank column according to the new position. Position counts start at zero.
 This will not persist the rank to the database.
+
+The options passed can be used to configure the ranking operation. Currently it is only possible to pass options related to [Locking](#locking). When passing a configuration hash under the `:advisory_lock` key one can pass additional options to `::with_advisory_lock`.
 
 The passed block will be executed after the new rank was assigned.
 
 When using [Locking](#locking) it is **discouraged** to use `move_to` without passing a block. The block will be executed inside of the advisory lock and should persist the change to the rank to ensure that no positioning conflicts will occur.
 </details>
 <details>
-<summary><code>move_to_top</code></summary>
+<summary><code>move_to_top(**options, &block)</code></summary>
 
-Alias to [`move_to(0)`](#move_to)
+Alias to [`move_to(0, **options, &block)`](#move_to)
 </details>
 
 <br />
 
 <details>
-<summary><a id="move_to!"></a><code>move_to!(position)</code></summary>
+<summary><a id="move_to!"></a><code>move_to!(position, **options)</code></summary>
 
 Like [`move_to`](#move_to). However, this methods persists the rank to the database directly.
 If an update is needed, the method will return the result of `save`, otherwise `true`.
 </details>
 <details>
-<summary><code>move_to_top!</code></summary>
+<summary><code>move_to_top!(**options)</code></summary>
 
-Alias to [`move_to!(0)`](#move_to!)
+Alias to [`move_to!(0, **options)`](#move_to!)
 </details>
 
 <br />
@@ -251,7 +253,7 @@ Page.first.paragraphs.ranked
 
 Since version 0.2.0 lexorank ships with advisory locking by default. Advisory locks are a locking mechanism on the database level that ensures that only one record in a collection can change their rank at a time. This is important to prevent two records being assigned the same rank.
 
-Advisory locking is enabled by default if the model class responds to the `with_advisory_lock` method. The easiest way to achieve this is by installing the incredible [`with_advisory_lock` gem](https://github.com/ClosureTree/with_advisory_lock).
+Advisory locking is enabled by default if the model class responds to the `::with_advisory_lock` method. The easiest way to achieve this is by installing the incredible [`with_advisory_lock` gem](https://github.com/ClosureTree/with_advisory_lock).
 
 It is also possible to implement advisory locking yourself. The `with_adivsory_lock` method must accept one name argument and arbitrary keyword arguments similar to the signature of the [`with_advisory_lock` gem](https://github.com/ClosureTree/with_advisory_lock).
 
@@ -285,6 +287,17 @@ Also it's possible to pass other options (e.g. `timeout_seconds` when using the 
 class Page < ActiveRecord::Base
   rank!(advisory_lock: { timeout_seconds: 3 })
 end
+```
+
+If an option needs to be applied for a single ranking operation only, you can directly pass additional options to all `move_to` methods using the `:advisory_lock` key. Those will overwrite all options set using `rank!`.
+
+```ruby
+class Page < ActiveRecord::Base
+  rank!(advisory_lock: { timeout_seconds: 3 })
+end
+
+# We might need a higher timeout here so we overwrite the initial configuration.
+Page.new.move_to_top!(advisory_lock: { timeout_seconds: 30 })
 ```
 
 ## Internals - How does lexorank work?

@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project tries to adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Changed
+
+* Allow passing options to all `move_to*` methods. This allows for options being passed to the `::with_advisory_lock` method. For example calling `move_to!(2, advisory_lock: { timeout_seconds: 30 })` will call `with_advisory_lock(lock_name, timeout_seconds: 30)`, changing the `timeout_seconds` option for this single advisory lock.
+
 ## [0.3.0] - 2024-08-28
 
 ### Changed
