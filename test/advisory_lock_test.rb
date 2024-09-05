@@ -56,6 +56,22 @@ class AdvisoryLockTest < ActiveSupport::TestCase
     assert_equal({ foo: 'bar', bar: 1 }, options)
   end
 
+  should 'allow options being passed to each #move_to operation' do
+    assert Page.lexorank_ranking.advisory_lock_config[:enabled]
+
+    assert_advisory_locked_with Page, ['pages_update_rank', { timeout_seconds: 3 }] do
+      Page.new.move_to_top!(advisory_lock: { timeout_seconds: 3 })
+    end
+
+    assert_advisory_locked_with Page, ['pages_update_rank', { timeout_seconds: 4 }] do
+      Page.new.move_to_end!(advisory_lock: { timeout_seconds: 4 })
+    end
+
+    assert_advisory_locked_with Page, ['pages_update_rank', { timeout_seconds: 5 }] do
+      Page.new.move_to!(2, advisory_lock: { timeout_seconds: 5 })
+    end
+  end
+
   should 'be able to overwrite advisory lock name' do
     class Page4 < Base
       self.table_name = 'pages'
