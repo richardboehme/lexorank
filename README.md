@@ -171,7 +171,11 @@ When using [Locking](#locking) it is **discouraged** to use `move_to` without pa
 <details>
 <summary><code>move_to_top(**options, &block)</code></summary>
 
-Alias to [`move_to(0, **options, &block)`](#move_to)
+Alias to [`move_to(0, ...)`](#move_to)
+</details>
+<summary><code>move_to_end(**options, &block)</code></summary>
+
+Like [`move_to`](#move_to) but moves the element to the end of the collection.
 </details>
 
 <br />
@@ -185,7 +189,11 @@ If an update is needed, the method will return the result of `save`, otherwise `
 <details>
 <summary><code>move_to_top!(**options)</code></summary>
 
-Alias to [`move_to!(0, **options)`](#move_to!)
+Like [`move_to!`](#move_to!) but moves the element to the top of the collection.
+</details>
+<summary><code>move_to_end!(**options)</code></summary>
+
+Like [`move_to!`](#move_to!) but moves the element to the end of the collection.
 </details>
 
 <br />
