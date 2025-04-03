@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'lexorank'
-require 'lexorank/ranking'
-require 'active_support/concern'
+require "lexorank"
+require "lexorank/ranking"
+require "active_support/concern"
 
 module Lexorank::Rankable
   extend ActiveSupport::Concern

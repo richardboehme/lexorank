@@ -1,28 +1,28 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class AdvisoryLockTest < ActiveSupport::TestCase
-  should 'raise if model does not respond to #with_advisory_lock and explicitly enabled' do
+  should "raise if model does not respond to #with_advisory_lock and explicitly enabled" do
     error =
       assert_raises Lexorank::InvalidConfigError do
         class Page1 < ActiveRecord::Base
-          self.table_name = 'pages'
+          self.table_name = "pages"
 
           rank!(advisory_lock: { enabled: true })
         end
       end
 
     assert_equal(
-      'Cannot enable advisory lock if AdvisoryLockTest::Page1 does not respond to #with_advisory_lock. ' \
-      'Consider installing the with_advisory_lock gem (https://rubygems.org/gems/with_advisory_lock).',
+      "Cannot enable advisory lock if AdvisoryLockTest::Page1 does not respond to #with_advisory_lock. " \
+      "Consider installing the with_advisory_lock gem (https://rubygems.org/gems/with_advisory_lock).",
       error.message
     )
   end
 
-  should 'disable advisory locks if the model does not respond to #with_advisory_lock' do
+  should "disable advisory locks if the model does not respond to #with_advisory_lock" do
     class Page2 < ActiveRecord::Base
-      self.table_name = 'pages'
+      self.table_name = "pages"
 
       rank!
     end
@@ -32,7 +32,7 @@ class AdvisoryLockTest < ActiveSupport::TestCase
     Page2.new.move_to_top!
   end
 
-  should 'enable advisory locks if model responds to #with_advisory_lock' do
+  should "enable advisory locks if model responds to #with_advisory_lock" do
     assert Page.lexorank_ranking.advisory_lock_config[:enabled]
 
     assert_advisory_locked Page do
@@ -40,41 +40,41 @@ class AdvisoryLockTest < ActiveSupport::TestCase
     end
   end
 
-  should 'allow arbitrary options passed to #with_advisory_lock' do
+  should "allow arbitrary options passed to #with_advisory_lock" do
     class Page3 < Base
-      self.table_name = 'pages'
+      self.table_name = "pages"
 
-      rank!(advisory_lock: { foo: 'bar', bar: 1 })
+      rank!(advisory_lock: { foo: "bar", bar: 1 })
     end
 
-    assert_equal({ enabled: true, foo: 'bar', bar: 1 }, Page3.lexorank_ranking.advisory_lock_config)
+    assert_equal({ enabled: true, foo: "bar", bar: 1 }, Page3.lexorank_ranking.advisory_lock_config)
 
     instance = Page3.new
     assert_nil Page3.advisory_locked_with
     instance.move_to_top!
     _name, options = Page3.advisory_locked_with
-    assert_equal({ foo: 'bar', bar: 1 }, options)
+    assert_equal({ foo: "bar", bar: 1 }, options)
   end
 
-  should 'allow options being passed to each #move_to operation' do
+  should "allow options being passed to each #move_to operation" do
     assert Page.lexorank_ranking.advisory_lock_config[:enabled]
 
-    assert_advisory_locked_with Page, ['pages_update_rank', { timeout_seconds: 3 }] do
+    assert_advisory_locked_with Page, ["pages_update_rank", { timeout_seconds: 3 }] do
       Page.new.move_to_top!(advisory_lock: { timeout_seconds: 3 })
     end
 
-    assert_advisory_locked_with Page, ['pages_update_rank', { timeout_seconds: 4 }] do
+    assert_advisory_locked_with Page, ["pages_update_rank", { timeout_seconds: 4 }] do
       Page.new.move_to_end!(advisory_lock: { timeout_seconds: 4 })
     end
 
-    assert_advisory_locked_with Page, ['pages_update_rank', { timeout_seconds: 5 }] do
+    assert_advisory_locked_with Page, ["pages_update_rank", { timeout_seconds: 5 }] do
       Page.new.move_to!(2, advisory_lock: { timeout_seconds: 5 })
     end
   end
 
-  should 'be able to overwrite advisory lock name' do
+  should "be able to overwrite advisory lock name" do
     class Page4 < Base
-      self.table_name = 'pages'
+      self.table_name = "pages"
 
       rank!(advisory_lock: { lock_name: ->(instance) { "my_custom_lock_name_#{instance.id}" } })
     end
