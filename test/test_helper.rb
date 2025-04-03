@@ -1,26 +1,26 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.unshift File.expand_path('../lib', __dir__)
-require 'lexorank'
+$LOAD_PATH.unshift File.expand_path("../lib", __dir__)
+require "lexorank"
 
-require 'pry'
-require 'shoulda-context'
-require 'active_record'
-require 'minitest/autorun'
-require 'minitest/reporters'
+require "pry"
+require "shoulda-context"
+require "active_record"
+require "minitest/autorun"
+require "minitest/reporters"
 
 Minitest::Reporters.use!([Minitest::Reporters::DefaultReporter.new(color: true)])
 
-db_config = YAML.load_file(File.expand_path('database.yml', __dir__)).fetch(ENV['DB'] || 'sqlite')
+db_config = YAML.load_file(File.expand_path("database.yml", __dir__)).fetch(ENV["DB"] || "sqlite")
 ActiveRecord::Base.establish_connection(db_config)
 ActiveRecord::Schema.verbose = false
-ActiveRecord::Base.logger = Logger.new('log/test.log')
-load 'schema.rb'
+ActiveRecord::Base.logger = Logger.new("log/test.log")
+load "schema.rb"
 
-require 'models/base'
-require 'models/page'
-require 'models/paragraph'
-require 'models/grouped_paragraph'
+require "models/base"
+require "models/page"
+require "models/paragraph"
+require "models/grouped_paragraph"
 
 class Minitest::Test
   include Shoulda::Context::DSL

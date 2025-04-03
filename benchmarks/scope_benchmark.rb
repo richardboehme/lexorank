@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.unshift File.expand_path('../lib', __dir__)
-require 'pry'
-require 'active_record'
-require 'securerandom'
+$LOAD_PATH.unshift File.expand_path("../lib", __dir__)
+require "pry"
+require "active_record"
+require "securerandom"
 
-require 'lexorank'
-require 'lexorank/rankable'
+require "lexorank"
+require "lexorank/rankable"
 
 db_config = {
-  adapter: 'sqlite3',
-  database: 'file:benchmarkmemdb?mode=memory&cache=private'
+  adapter: "sqlite3",
+  database: "file:benchmarkmemdb?mode=memory&cache=private"
 }
 ActiveRecord::Base.establish_connection(db_config)
 ActiveRecord::Schema.verbose = false
@@ -21,13 +21,13 @@ $unbalanced_table_name = SecureRandom.hex
 
 ActiveRecord::Schema.define do
   create_table $balanced_table_name, force: :cascade do |t|
-    t.string 'rank'
-    t.index ['rank'], name: 'index_balanceds_on_rank', unique: true
+    t.string "rank"
+    t.index ["rank"], name: "index_balanceds_on_rank", unique: true
   end
 
   create_table $unbalanced_table_name, force: :cascade do |t|
-    t.string 'rank'
-    t.index ['rank'], name: 'index_unbalanceds_on_rank', unique: true
+    t.string "rank"
+    t.index ["rank"], name: "index_unbalanceds_on_rank", unique: true
   end
 end
 
@@ -74,8 +74,8 @@ def clear_active_record_cache
 end
 
 Benchmark.bmbm do |x|
-  x.report('Clear cache #1: ') { clear_active_record_cache }
-  x.report('Unbalanced: ') { Unbalanced.ranked.to_a }
-  x.report('Clear cache #2: ') { clear_active_record_cache }
-  x.report('Balanced: ') { Balanced.ranked.to_a }
+  x.report("Clear cache #1: ") { clear_active_record_cache }
+  x.report("Unbalanced: ") { Unbalanced.ranked.to_a }
+  x.report("Clear cache #2: ") { clear_active_record_cache }
+  x.report("Balanced: ") { Balanced.ranked.to_a }
 end

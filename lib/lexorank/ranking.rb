@@ -17,7 +17,7 @@ class Lexorank::Ranking
       raise(
         Lexorank::InvalidConfigError,
         "Cannot enable advisory lock if #{record_class.name} does not respond to #with_advisory_lock. " \
-        'Consider installing the with_advisory_lock gem (https://rubygems.org/gems/with_advisory_lock).'
+        "Consider installing the with_advisory_lock gem (https://rubygems.org/gems/with_advisory_lock)."
       )
     end
 

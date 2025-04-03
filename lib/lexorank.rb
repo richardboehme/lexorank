@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lexorank/version'
+require "lexorank/version"
 
 # Inspired by https://github.com/DevStarSJ/LexoRank/blob/master/lexo_rank.rb licensed under
 # MIT License
@@ -28,14 +28,14 @@ module Lexorank
   class InvalidRankError < StandardError; end
   class InvalidConfigError < StandardError; end
 
-  MIN_CHAR = '0'
-  MAX_CHAR = 'z'
+  MIN_CHAR = "0"
+  MAX_CHAR = "z"
 
   def value_between(before_, after_)
     before = before_ || MIN_CHAR
     after = after_ || MAX_CHAR
 
-    rank = ''
+    rank = ""
 
     (before.length + after.length).times do |i|
       prev_char = get_char(before, i, MIN_CHAR)
@@ -68,8 +68,8 @@ module Lexorank
     # Please report if you have another opinion about that or if you reached the exception! (of course you can force it by using `value_between(nil, '0')`)
     if rank >= after
       raise InvalidRankError,
-        'This rank should not be achievable using the Lexorank::Rankable module! ' \
-        'Please report to https://github.com/richardboehme/lexorank/issues! ' \
+        "This rank should not be achievable using the Lexorank::Rankable module! " \
+        "Please report to https://github.com/richardboehme/lexorank/issues! " \
         "The supplied ranks were #{before_.inspect} and #{after_.inspect}. Please include those in the issue description."
     end
     rank

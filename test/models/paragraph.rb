@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lexorank/rankable'
+require "lexorank/rankable"
 
 class Paragraph < Base
   belongs_to :page
