@@ -168,11 +168,14 @@ The passed block will be executed after the new rank was assigned.
 
 When using [Locking](#locking) it is **discouraged** to use `move_to` without passing a block. The block will be executed inside of the advisory lock and should persist the change to the rank to ensure that no positioning conflicts will occur.
 </details>
+
 <details>
 <summary><code>move_to_top(**options, &block)</code></summary>
 
 Alias to [`move_to(0, ...)`](#move_to)
 </details>
+
+<details>    
 <summary><code>move_to_end(**options, &block)</code></summary>
 
 Like [`move_to`](#move_to) but moves the element to the end of the collection.
@@ -186,11 +189,14 @@ Like [`move_to`](#move_to) but moves the element to the end of the collection.
 Like [`move_to`](#move_to). However, this methods persists the rank to the database directly.
 If an update is needed, the method will return the result of `save`, otherwise `true`.
 </details>
+
 <details>
 <summary><code>move_to_top!(**options)</code></summary>
 
 Like [`move_to!`](#move_to!) but moves the element to the top of the collection.
 </details>
+
+<details>
 <summary><code>move_to_end!(**options)</code></summary>
 
 Like [`move_to!`](#move_to!) but moves the element to the end of the collection.
@@ -265,7 +271,7 @@ Advisory locking is enabled by default if the model class responds to the `::wit
 
 It is also possible to implement advisory locking yourself. The `with_adivsory_lock` method must accept one name argument and arbitrary keyword arguments similar to the signature of the [`with_advisory_lock` gem](https://github.com/ClosureTree/with_advisory_lock).
 
-With advisory locking enabled it is actively **dicouraged** to call `move_to` or `move_to_top` without a block. This is because those methods do not persist to the database and thus cannot acquire a lock. Make sure the bang equivalents or pass a block in which the record is persisted.
+With advisory locking enabled it is actively **dicouraged** to call `move_to` or `move_to_top` without a block. This is because those methods do not persist to the database and thus cannot acquire a lock. Make sure to use the bang equivalents or pass a block in which the record is persisted.
 
 ### Opting out of locking
 
